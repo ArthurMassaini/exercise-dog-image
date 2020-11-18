@@ -6,7 +6,7 @@ class Dog extends React.Component {
 
     this.fetchDog = this.fetchDog.bind(this);
     this.renderDogImage = this.renderDogImage.bind(this);
-    this.oneMore = this.oneMore.bind(this);
+    this.handleClick = this.handleClick.bind(this);
 
     this.state = {
       imageDog: '',
@@ -38,7 +38,20 @@ class Dog extends React.Component {
     this.fetchDog();
   }
 
-  oneMore() {
+  shouldComponentUpdate() {
+    const { imageDog } = this.state;
+    if (imageDog.includes('terrier')) {
+      return false;
+    }
+    return true;
+  }
+
+  componentDidUpdate() {
+    const { imageDog } = this.state;
+    localStorage.setItem('url', imageDog);
+  }
+
+  handleClick() {
     this.setState((previousState) => ({
       allDogs: [...previousState.allDogs, previousState.imageDog],
     }));
@@ -53,7 +66,7 @@ class Dog extends React.Component {
           <img src={this.state.imageDog} alt="random-dog" className="image" />
         </figure>
 
-        <button type="button" onClick={this.oneMore}>
+        <button type="button" onClick={this.handleClick}>
           Mais um!
         </button>
       </div>
